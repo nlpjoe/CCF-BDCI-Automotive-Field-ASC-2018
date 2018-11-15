@@ -8,7 +8,7 @@
 
 ELMo哈工大基于pytorch的pretrain版本和我用tf pretrain训练集的效果都不好，但是我也保留了tf pretrain版本代码。
 
-Bert我们没有弄pretrain，直接抽取的特征，效果和百度百科词向量相当。
+Bert我们没有弄finetune，直接抽取的特征，效果和百度百科词向量相当。
 
 希望大家一起学习进步。
 
