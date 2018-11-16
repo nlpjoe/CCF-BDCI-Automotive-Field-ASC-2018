@@ -2,7 +2,7 @@
 
 以前没接触过ASC、TSC领域，最开始纠结这是单分类还是多分类问题，走了一些弯路。最终我们回到ASC赛道上，根据直觉，我们设计了一个基于memory的lstm-attention模型，复赛B榜线上在0.69左右，融合最终得分0.70，单模型结构图如下：
 
-![](https://github.com/nlpjoe/CCF-BDCI-Automotive-Field-ASC-2018/model.jpeg)
+![](./model.jpeg)
 
 
 后面时间比较紧张，复现今年ASC论文的代码效果都不好，最终排名7/1701，思路如同代码所写，很简单。
