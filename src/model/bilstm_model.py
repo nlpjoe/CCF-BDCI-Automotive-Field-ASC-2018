@@ -52,8 +52,8 @@ class BilstmV0(BasicDeepModel):
         else:
             exit('wrong feature')
 
-        # self.layer_embedding = tf.get_variable(shape=[10, self.hidden_dim], name='layer_embedding')
-        self.layer_embedding = tf.get_variable(initializer=self.sentiment_embed, name='layer_embedding')
+        self.layer_embedding = tf.get_variable(shape=[10, self.hidden_dim], name='layer_embedding')
+        # self.layer_embedding = tf.get_variable(initializer=self.sentiment_embed, name='layer_embedding')
 
         self.forward = self.LSTM()
         self.backwad = self.LSTM()

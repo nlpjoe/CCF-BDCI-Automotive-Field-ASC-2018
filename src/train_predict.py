@@ -36,8 +36,8 @@ def deep_data_prepare(config):
     # 用字向量
     train_x_char = train_df['char']
     train_x_word = train_df['word']
-    train_x_sent_word = [w for w in open('../data/sentiment_word.txt')]
-    train_x_sent_char = [w for w in open('../data/sentiment_word.txt')]
+    # train_x_sent_word = [w for w in open('../data/sentiment_word.txt')]
+    # train_x_sent_char = [w for w in open('../data/sentiment_word.txt')]
     train_jp_char = train_jp['char']
     train_jp_word = train_jp['word']
     train_en_char = train_en['char']
@@ -145,8 +145,8 @@ def deep_data_prepare(config):
     test_x_char = word2id(test_char, type='char')
     test_x_word = word2id(test_word, type='word')
 
-    train_x_sent_word = word2id(train_x_sent_word, type='word')
-    train_x_sent_char = word2id(train_x_sent_char, type='char')
+    # train_x_sent_word = word2id(train_x_sent_word, type='word')
+    # train_x_sent_char = word2id(train_x_sent_char, type='char')
     # rcnn模型数据准备
     UNK_CHAR = PAD_CHAR
     UNK_WORD = PAD_WORD
@@ -182,35 +182,35 @@ def deep_data_prepare(config):
 
     train = {}
     test = {}
-    tokenizer = tokenization.FullTokenizer(
-                    vocab_file=config.BERT_VOCAB_FILES, do_lower_case=False)
+    # tokenizer = tokenization.FullTokenizer(
+                    # vocab_file=config.BERT_VOCAB_FILES, do_lower_case=False)
 
-    def get_bert_data(corpus):
-        input_ids = []
-        input_mask = []
-        input_segment_ids = []
+    # def get_bert_data(corpus):
+        # input_ids = []
+        # input_mask = []
+        # input_segment_ids = []
 
-        for sent in train_df['word'].values:
-            sent = ''.join(sent.strip().split())
-            tmp_token_ids = tokenizer.convert_tokens_to_ids(['[CLS]'] + tokenizer.tokenize(sent)[:188] + ['[SEP]'])
-            tmp_mask = [1] * len(tmp_token_ids)
-            tmp_segment_ids = [0] * len(tmp_token_ids)
-            if len(tmp_token_ids) < 190:
-                tmp_segment_ids.extend([0] * (190-len(tmp_token_ids)))
-                tmp_mask.extend([0] * (190-len(tmp_token_ids)))
-                tmp_token_ids.extend([0] * (190-len(tmp_token_ids)))
-            input_ids.append(tmp_token_ids)
-            input_mask.append(tmp_mask)
-            input_segment_ids.append(tmp_segment_ids)
-        return np.array(input_ids, dtype='int32'), np.array(input_mask, dtype='int32'), np.array(input_segment_ids, dtype='int32')
+        # for sent in train_df['word'].values:
+            # sent = ''.join(sent.strip().split())
+            # tmp_token_ids = tokenizer.convert_tokens_to_ids(['[CLS]'] + tokenizer.tokenize(sent)[:188] + ['[SEP]'])
+            # tmp_mask = [1] * len(tmp_token_ids)
+            # tmp_segment_ids = [0] * len(tmp_token_ids)
+            # if len(tmp_token_ids) < 190:
+                # tmp_segment_ids.extend([0] * (190-len(tmp_token_ids)))
+                # tmp_mask.extend([0] * (190-len(tmp_token_ids)))
+                # tmp_token_ids.extend([0] * (190-len(tmp_token_ids)))
+            # input_ids.append(tmp_token_ids)
+            # input_mask.append(tmp_mask)
+            # input_segment_ids.append(tmp_segment_ids)
+        # return np.array(input_ids, dtype='int32'), np.array(input_mask, dtype='int32'), np.array(input_segment_ids, dtype='int32')
 
-    train['token_id'], train['mask_id'], train['type_id'] = get_bert_data(train_df['word'].values)
-    test['token_id'], test['mask_id'], test['type_id'] = get_bert_data(test_df['word'].values)
+    # train['token_id'], train['mask_id'], train['type_id'] = get_bert_data(train_df['word'].values)
+    # test['token_id'], test['mask_id'], test['type_id'] = get_bert_data(test_df['word'].values)
 
     train['word'] = train_x_word
     train['char'] = train_x_char
-    train['word_sent'] = train_x_sent_word
-    train['char_sent'] = train_x_sent_char
+    # train['word_sent'] = train_x_sent_word
+    # train['char_sent'] = train_x_sent_char
     # rcnn
     train['word_left'] = train_x_word_left
     train['word_right'] = train_x_word_right
@@ -234,17 +234,17 @@ def deep_data_prepare(config):
     assert test['word_left'].shape == test['word_right'].shape == test['word'].shape
     assert test['char_left'].shape == test['char_right'].shape == test['char'].shape
 
-    batcher = TokenBatcher(config.elmo_word_vocab_file)
-    train['elmo_word'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in train_df['word']])
-    test['elmo_word'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in test_df['word']])
+    # batcher = TokenBatcher(config.elmo_word_vocab_file)
+    # train['elmo_word'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in train_df['word']])
+    # test['elmo_word'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in test_df['word']])
 
-    batcher = TokenBatcher(config.elmo_char_vocab_file)
-    train['elmo_char'] = batcher.batch_sentences([str(w).split()[:config.CHAR_MAXLEN] for w in train_df['char']])
-    test['elmo_char'] = batcher.batch_sentences([str(w).split()[:config.CHAR_MAXLEN] for w in test_df['char']])
+    # batcher = TokenBatcher(config.elmo_char_vocab_file)
+    # train['elmo_char'] = batcher.batch_sentences([str(w).split()[:config.CHAR_MAXLEN] for w in train_df['char']])
+    # test['elmo_char'] = batcher.batch_sentences([str(w).split()[:config.CHAR_MAXLEN] for w in test_df['char']])
 
-    batcher = TokenBatcher(config.elmo_qiuqiu_vocab_file)
-    train['elmo_qiuqiu'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in train_df['word']])
-    test['elmo_qiuqiu'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in test_df['word']])
+    # batcher = TokenBatcher(config.elmo_qiuqiu_vocab_file)
+    # train['elmo_qiuqiu'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in train_df['word']])
+    # test['elmo_qiuqiu'] = batcher.batch_sentences([str(w).split()[:config.WORD_MAXLEN] for w in test_df['word']])
 
     return train, train_y, test
 

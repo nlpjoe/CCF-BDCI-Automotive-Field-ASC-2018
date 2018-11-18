@@ -37,7 +37,7 @@ class Config(object):
             'convlstm': ConvlstmModel,
             'lstmconv': LstmconvModel,
             # 'dpcnn': DpcnnModel,
-            'rcnn': RCNNModel,
+            # 'rcnn': RCNNModel,
             # 'capsule': CapsuleModel,
             # 'han': HANModel,
             # 'hybridnn1': HybridNN1Model,
@@ -51,32 +51,32 @@ class Config(object):
         self.EMBED_SIZE = 300
         self.main_feature = 'word'
         self.is_debug = True
-        self.elmo_word_options_file = './bilm/dump/options.word.json'
-        self.elmo_word_weight_file = './bilm/dump/weights.word.hdf5'
-        self.elmo_word_embed_file = './bilm/dump/vocab_embedding.word.hdf5'
-        self.elmo_word_vocab_file = '../data/word2vec_models/word2vec.word.300d.vocab.txt'
+        # self.elmo_word_options_file = './bilm/dump/options.word.json'
+        # self.elmo_word_weight_file = './bilm/dump/weights.word.hdf5'
+        # self.elmo_word_embed_file = './bilm/dump/vocab_embedding.word.hdf5'
+        # self.elmo_word_vocab_file = '../data/word2vec_models/word2vec.word.300d.vocab.txt'
 
-        self.elmo_char_options_file = './bilm/dump/options.char.json'
-        self.elmo_char_weight_file = './bilm/dump/weights.char.hdf5'
-        self.elmo_char_embed_file = './bilm/dump/vocab_embedding.char.hdf5'
-        self.elmo_char_vocab_file = '../data/word2vec_models/word2vec.char.300d.vocab.txt'
+        # self.elmo_char_options_file = './bilm/dump/options.char.json'
+        # self.elmo_char_weight_file = './bilm/dump/weights.char.hdf5'
+        # self.elmo_char_embed_file = './bilm/dump/vocab_embedding.char.hdf5'
+        # self.elmo_char_vocab_file = '../data/word2vec_models/word2vec.char.300d.vocab.txt'
 
-        self.elmo_qiuqiu_options_file = './bilm/dump/tmp/options.json'
-        self.elmo_qiuqiu_weight_file = './bilm/dump/tmp/weight-11-4.hdf5'
-        self.elmo_qiuqiu_embed_file = './bilm/dump/tmp/word_embedding.after.elmo-11-4.hdf5'
-        self.elmo_qiuqiu_vocab_file = './bilm/dump/tmp/sa_elmo_vocabs.txt'
+        # self.elmo_qiuqiu_options_file = './bilm/dump/tmp/options.json'
+        # self.elmo_qiuqiu_weight_file = './bilm/dump/tmp/weight-11-4.hdf5'
+        # self.elmo_qiuqiu_embed_file = './bilm/dump/tmp/word_embedding.after.elmo-11-4.hdf5'
+        # self.elmo_qiuqiu_vocab_file = './bilm/dump/tmp/sa_elmo_vocabs.txt'
 
         self.loss_path = '../data/loss'
         self.TEST_X = '../data/csvs/test_public.csv'
         self.TRAIN_MULTI_X = '../data/csvs/train_multi.csv'
         self.TRAIN_JP = '../data/csvs/round2zh2jp.csv'
         self.TRAIN_EN = '../data/csvs/round2zh2en.csv'
-        self.SENTIMENT_EMBED_PATH = '../data/sentiment_embedding.pkl'
+        # self.SENTIMENT_EMBED_PATH = '../data/sentiment_embedding.pkl'
 
-        self.BERT_VOCAB_FILES = '../data/chinese_L-12_H-768_A-12/vocab.txt'
-        self.BERT_CONFIG_FILES = '../data/chinese_L-12_H-768_A-12/bert_config.json'
+        # self.BERT_VOCAB_FILES = '../data/chinese_L-12_H-768_A-12/vocab.txt'
+        # self.BERT_CONFIG_FILES = '../data/chinese_L-12_H-768_A-12/bert_config.json'
 
-        self.Y_DISTILLATION = '../data/result/oof.pkl'
+        # self.Y_DISTILLATION = '../data/result/oof.pkl'
 
     # property 等待调用到它时才计算，先加载embed size再加载对应词向量
     @property

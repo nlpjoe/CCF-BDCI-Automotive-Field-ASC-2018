@@ -83,7 +83,7 @@ class BasicDeepModel(BasicModel):
         self.n_classes = config.n_classes
         self.main_feature = config.main_feature
         self.n_epochs = config.n_epochs
-        self.sentiment_embed = pickle.load(open(self.config.SENTIMENT_EMBED_PATH, 'rb'))
+        # self.sentiment_embed = pickle.load(open(self.config.SENTIMENT_EMBED_PATH, 'rb'))
 
         if self.main_feature == 'char':
             self.embedding = config.char_embedding
@@ -503,8 +503,8 @@ class BasicDeepModel(BasicModel):
         :param train:
         :return:
         """
-        train_y2 = np.reshape(np.argmax(pickle.load(open(self.config.Y_DISTILLATION, 'rb')), -1), [-1])
-        train_y2 = np.reshape(np.eye(4)[train_y2], [-1, 10, 4])
+        # train_y2 = np.reshape(np.argmax(pickle.load(open(self.config.Y_DISTILLATION, 'rb')), -1), [-1])
+        # train_y2 = np.reshape(np.eye(4)[train_y2], [-1, 10, 4])
         gpu_options = tf.GPUOptions(visible_device_list=self.config.gpu, allow_growth=True)
         with tf.Graph().as_default():
             session_conf = tf.ConfigProto(
@@ -526,67 +526,63 @@ class BasicDeepModel(BasicModel):
 
                 decay_ops = learning_rate.assign(learning_rate*0.5)
 
-                def train_step(x_batch, x_token, x_mask, x_type, y_batch, y2_batch, global_step):
+                def train_step(x_batch, y_batch, global_step):
                     batch_len = len(x_batch)
                     if batch_len != self.batch_size:
                         n_copy = self.batch_size // batch_len + 1
                         x_copy = [x_batch for _ in range(n_copy)]
-                        x_token_copy = [x_token for _ in range(n_copy)]
-                        x_mask_copy = [x_mask for _ in range(n_copy)]
-                        x_type_copy = [x_type for _ in range(n_copy)]
+                        # x_token_copy = [x_token for _ in range(n_copy)]
+                        # x_mask_copy = [x_mask for _ in range(n_copy)]
+                        # x_type_copy = [x_type for _ in range(n_copy)]
                         y_copy = [y_batch for _ in range(n_copy)]
-                        y2_copy = [y2_batch for _ in range(n_copy)]
+                        # y2_copy = [y2_batch for _ in range(n_copy)]
                         x_batch = np.concatenate(x_copy)[:self.batch_size]
-                        x_token = np.concatenate(x_token_copy)[:self.batch_size]
-                        x_type = np.concatenate(x_type_copy)[:self.batch_size]
-                        x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
+                        # x_token = np.concatenate(x_token_copy)[:self.batch_size]
+                        # x_type = np.concatenate(x_type_copy)[:self.batch_size]
+                        # x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
                         y_batch = np.concatenate(y_copy)[:self.batch_size]
-                        y2_batch = np.concatenate(y2_copy)[:self.batch_size]
+                        # y2_batch = np.concatenate(y2_copy)[:self.batch_size]
 
                     feed_dict = {
                         model.input_x: x_batch,
-                        model.input_ids: x_token,
-                        model.type_ids: x_type,
-                        model.mask_ids: x_mask,
+                        # model.input_ids: x_token,
+                        # model.type_ids: x_type,
+                        # model.mask_ids: x_mask,
                         model.input_y: y_batch,
-                        model.input_y2: y2_batch,
+                        # model.input_y2: y2_batch,
                         model.dropout_keep_prob: 0.5,
-                        #  model.dropout_keep_prob: 0.5,
                         model.output_keep_prob: 1.0,
-                        model.is_training: True
                     }
                     _, loss, prediction, step = sess.run(
                         [train_op, model.loss, model.prediction, global_step],
                         feed_dict)
                     return loss, prediction[:batch_len], step
 
-                def dev_step(x_batch, x_token, x_mask, x_type, y_batch, y2_batch, global_step, writer=None):
+                def dev_step(x_batch, y_batch, global_step, writer=None):
                     batch_len = len(x_batch)
                     if batch_len != self.batch_size:
                         n_copy = self.batch_size // batch_len + 1
                         x_copy = [x_batch for _ in range(n_copy)]
-                        x_token_copy = [x_token for _ in range(n_copy)]
-                        x_mask_copy = [x_mask for _ in range(n_copy)]
-                        x_type_copy = [x_type for _ in range(n_copy)]
+                        # x_token_copy = [x_token for _ in range(n_copy)]
+                        # x_mask_copy = [x_mask for _ in range(n_copy)]
+                        # x_type_copy = [x_type for _ in range(n_copy)]
                         y_copy = [y_batch for _ in range(n_copy)]
-                        y2_copy = [y2_batch for _ in range(n_copy)]
+                        # y2_copy = [y2_batch for _ in range(n_copy)]
                         x_batch = np.concatenate(x_copy)[:self.batch_size]
-                        x_token = np.concatenate(x_token_copy)[:self.batch_size]
-                        x_type = np.concatenate(x_type_copy)[:self.batch_size]
-                        x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
+                        # x_token = np.concatenate(x_token_copy)[:self.batch_size]
+                        # x_type = np.concatenate(x_type_copy)[:self.batch_size]
+                        # x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
                         y_batch = np.concatenate(y_copy)[:self.batch_size]
-                        y2_batch = np.concatenate(y2_copy)[:self.batch_size]
+                        # y2_batch = np.concatenate(y2_copy)[:self.batch_size]
                     feed_dict = {
                         model.input_x: x_batch,
-                        model.input_ids: x_token,
-                        model.type_ids: x_type,
-                        model.mask_ids: x_mask,
+                        # model.input_ids: x_token,
+                        # model.type_ids: x_type,
+                        # model.mask_ids: x_mask,
                         model.input_y: y_batch,
-                        model.input_y2: y2_batch,
+                        # model.input_y2: y2_batch,
                         model.dropout_keep_prob: 1.0,
-                        #  model.dropout_keep_prob: 0.5,
                         model.output_keep_prob: 1.0,
-                        model.is_training: False
                     }
 
                     loss, prediction = sess.run(
@@ -597,27 +593,25 @@ class BasicDeepModel(BasicModel):
                 def test_step(batches):
                     all_prob = []
                     for x_batch in batches:
-                        x_batch, x_token, x_mask, x_type = zip(*batch)  # zip(*) == unzip
                         batch_len = len(x_batch)
                         if batch_len != self.batch_size:
                             n_copy = self.batch_size // batch_len + 1
                             x_copy = [x_batch for _ in range(n_copy)]
-                            x_token_copy = [x_token for _ in range(n_copy)]
-                            x_mask_copy = [x_mask for _ in range(n_copy)]
-                            x_type_copy = [x_type for _ in range(n_copy)]
+                            # x_token_copy = [x_token for _ in range(n_copy)]
+                            # x_mask_copy = [x_mask for _ in range(n_copy)]
+                            # x_type_copy = [x_type for _ in range(n_copy)]
                             x_batch = np.concatenate(x_copy)[:self.batch_size]
-                            x_token = np.concatenate(x_token_copy)[:self.batch_size]
-                            x_type = np.concatenate(x_type_copy)[:self.batch_size]
-                            x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
+                            # x_token = np.concatenate(x_token_copy)[:self.batch_size]
+                            # x_type = np.concatenate(x_type_copy)[:self.batch_size]
+                            # x_mask = np.concatenate(x_mask_copy)[:self.batch_size]
 
                         feed_dict = {
                             model.input_x: x_batch,
-                            model.input_ids: x_token,
-                            model.type_ids: x_type,
-                            model.mask_ids: x_mask,
+                            # model.input_ids: x_token,
+                            # model.type_ids: x_type,
+                            # model.mask_ids: x_mask,
                             model.dropout_keep_prob: 1.0,
                             model.output_keep_prob: 1.0,
-                            model.is_training: False
                         }
 
                         preds = sess.run([model.prob], feed_dict)[0][:batch_len]
@@ -629,18 +623,18 @@ class BasicDeepModel(BasicModel):
 
                 # 训练集
                 train = train_dict[self.main_feature][:n_sent]
-                train_token_id = train_dict['token_id'][:n_sent]
-                train_mask_id = train_dict['mask_id'][:n_sent]
-                train_type_id = train_dict['type_id'][:n_sent]
+                # train_token_id = train_dict['token_id'][:n_sent]
+                # train_mask_id = train_dict['mask_id'][:n_sent]
+                # train_type_id = train_dict['type_id'][:n_sent]
 
                 train_jp = train_dict[self.main_feature][n_sent:2*n_sent]
                 train_en = train_dict[self.main_feature][2*n_sent:3*n_sent]
 
                 # 测试集
                 test_data = test[self.main_feature.lower()]
-                test_token_id = test['token_id']
-                test_mask_id = test['mask_id']
-                test_type_id = test['type_id']
+                # test_token_id = test['token_id']
+                # test_mask_id = test['mask_id']
+                # test_type_id = test['type_id']
 
                 # 结果
                 total_dev_probs = np.zeros((len(train), 10, self.n_classes))
@@ -660,7 +654,7 @@ class BasicDeepModel(BasicModel):
                     os.makedirs(checkpoint_dir, exist_ok=True)
                     saver = tf.train.Saver(max_to_keep=None)
 
-                    max_sub_f1 = 0.0
+                    max_sub_f1 = -0.1
                     min_sub_loss = 10000.
                     for j in range(1):  # 3次取最好的结果
                         print('\n----第{}折{}----\n'.format(ith_fold, j))
@@ -672,18 +666,18 @@ class BasicDeepModel(BasicModel):
                         #  kfold_y_train_dill = np.concatenate((train_y2[train_index], train_y2[train_index], train_y2[train_index]))
 
                         kfold_X_train = train[train_index]
-                        kfold_X_token_train = train_token_id[train_index]
-                        kfold_X_mask_train = train_mask_id[train_index]
-                        kfold_X_type_train = train_type_id[train_index]
+                        # kfold_X_token_train = train_token_id[train_index]
+                        # kfold_X_mask_train = train_mask_id[train_index]
+                        # kfold_X_type_train = train_type_id[train_index]
                         kfold_y_train = train_y[train_index]
-                        kfold_y_train_dill = train_y2[train_index]
+                        # kfold_y_train_dill = train_y2[train_index]
 
                         kfold_X_dev = train[dev_index]
-                        kfold_X_token_dev = train_token_id[dev_index]
-                        kfold_X_mask_dev = train_mask_id[dev_index]
-                        kfold_X_type_dev = train_type_id[dev_index]
+                        # kfold_X_token_dev = train_token_id[dev_index]
+                        # kfold_X_mask_dev = train_mask_id[dev_index]
+                        # kfold_X_type_dev = train_type_id[dev_index]
                         kfold_y_dev = train_y[dev_index]
-                        kfold_y_dev_dill = train_y2[dev_index]
+                        # kfold_y_dev_dill = train_y2[dev_index]
 
                         max_f1 = -0.01
                         min_loss = 10000.
@@ -692,13 +686,12 @@ class BasicDeepModel(BasicModel):
                             # if early_stop >= 20:
                                 # break
                             print('epoch: %d' % epoch)
-                            batches = self.batch_iter(list(zip(kfold_X_train, kfold_X_token_train, kfold_X_mask_train, kfold_X_type_train,\
-                                                               kfold_y_train, kfold_y_train_dill)), self.batch_size, shuffle=True)
+                            batches = self.batch_iter(list(zip(kfold_X_train, kfold_y_train)), self.batch_size, shuffle=True)
                             for batch in batches:
                                 # if early_stop >= 20:
                                     # break
-                                x_batch, x_token, x_mask, x_type, y_batch, y2_batch = zip(*batch)  # zip(*) == unzip
-                                loss, train_pred, step = train_step(x_batch, x_token, x_mask, x_type, y_batch, y2_batch, global_step)
+                                x_batch, y_batch = zip(*batch)  # zip(*) == unzip
+                                loss, train_pred, step = train_step(x_batch, y_batch, global_step)
                                 f1_score = self.get_f1_score(train_pred, np.argmax(y_batch, -1))
                                 if step % 10 == 0:
                                     time_str = datetime.datetime.now().isoformat()
@@ -707,10 +700,10 @@ class BasicDeepModel(BasicModel):
                                 if step % 50 == 0:
                                     dev_losses = []
                                     dev_preds = []
-                                    dev_batches = self.batch_iter(list(zip(kfold_X_dev, kfold_X_token_dev, kfold_X_mask_dev, kfold_X_type_dev, kfold_y_dev, kfold_y_dev_dill)), self.batch_size, shuffle=False)
+                                    dev_batches = self.batch_iter(list(zip(kfold_X_dev, kfold_y_dev)), self.batch_size, shuffle=False)
                                     for dev_batch in dev_batches:
-                                        x_batch, x_token, x_mask, x_type, y_batch, y2_batch = zip(*dev_batch)  # zip(*) == unzip
-                                        loss, dev_pred = dev_step(x_batch, x_token, x_mask, x_type, y_batch, y2_batch, step)
+                                        x_batch, y_batch = zip(*dev_batch)  # zip(*) == unzip
+                                        loss, dev_pred = dev_step(x_batch, y_batch, step)
                                         dev_losses.append(loss)
                                         dev_preds.append(dev_pred)
                                     loss = np.mean(dev_losses)
@@ -744,8 +737,8 @@ class BasicDeepModel(BasicModel):
                             exit()
                         # test_batches = self.batch_iter(test_data,  self.batch_size, shuffle=False)
                         # dev_batches = self.batch_iter(kfold_X_dev, self.batch_size, shuffle=False)
-                        test_batches = self.batch_iter(list(zip(test_data, test_token_id, test_mask_id, test_type_id)), self.batch_size, shuffle=False)
-                        dev_batches = self.batch_iter(list(zip(kfold_X_dev, kfold_X_token_dev, kfold_X_mask_dev, kfold_X_type_dev)), self.batch_size, shuffle=False)
+                        test_batches = self.batch_iter(test_data, self.batch_size, shuffle=False)
+                        dev_batches = self.batch_iter(kfold_X_dev, self.batch_size, shuffle=False)
 
                         if max_f1 > max_sub_f1:  # 该次最优
                             print('\n获取临时测试结果, f1:{}->{}'.format(max_sub_f1, max_f1))

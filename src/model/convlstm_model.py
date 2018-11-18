@@ -124,7 +124,7 @@ class ConvlstmModel(BasicDeepModel):
 
         if not self.config.balance:
             self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=tf.reshape(self.input_y, [-1,4])))
-            self.loss += tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=tf.reshape(self.input_y2, [-1,4])))
+            # self.loss += tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=tf.reshape(self.input_y2, [-1,4])))
         else:
             #  class0_weight = 0.882 * self.n_classes  # 第0类的权重系数
             #  class1_weight = 0.019 * self.n_classes  # 第1类的权重系数
