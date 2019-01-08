@@ -5,7 +5,7 @@
 ![](./model.jpeg)
 
 
-后面时间比较紧张，复现今年ASC论文的代码效果都不好，最终排名7/1701，思路如同代码所写，很简单。
+后面时间比较紧张，复现今年ASC论文的代码效果都不好，最终排名6/1701，思路如同代码所写，很简单。
 
 原始数据可在[比赛数据](https://www.datafountain.cn/competitions/310/details/data-evaluation)处下载，由于这次我们问题建模方式比较多，数据预处理代码也比较多，所以我会上传一份处理好的数据(包括处理好的Bert特征和百度百科词向量)放在[百度云盘](https://pan.baidu.com/s/1ZrgQ6Wp_sFRPrZGjZiBPaA)，下载后请解压放在`data/`目录下。
 
